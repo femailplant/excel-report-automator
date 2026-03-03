@@ -131,22 +131,54 @@ with col3:
     st.markdown("<span style='font-size:0.85rem; color:#8c92ac;'>Upload Template Excel files</span>", unsafe_allow_html=True)
     template_files = st.file_uploader("Templates limits 200MB - XLSX", type=["xlsx"], accept_multiple_files=True, label_visibility="collapsed")
 
-# UI Step Indicator
-st.markdown("""
+# Determine Status dynamically
+is_mapping = mapping_file is not None
+is_source = source_files is not None and len(source_files) > 0
+is_template = template_files is not None and len(template_files) > 0
+
+# Colors
+active_color = "#ff7b54"
+inactive_color = "#3b4252"
+text_active = "#ff7b54"
+text_inactive = "#8c92ac"
+
+# Step 1
+s1_col = active_color if is_mapping else inactive_color
+s1_txt = text_active if is_mapping else text_inactive
+s1_class = "step-circle" if is_mapping else "step-circle inactive"
+
+# Line 1-2
+l1_class = "step-line" if is_source else "step-line inactive"
+
+# Step 2 (Source)
+s2_col = active_color if is_source else inactive_color
+s2_txt = text_active if is_source else text_inactive
+s2_class = "step-circle" if is_source else "step-circle inactive"
+
+# Line 2-3
+l2_class = "step-line" if is_template else "step-line inactive"
+
+# Step 3 (Template)
+s3_col = active_color if is_template else inactive_color
+s3_txt = text_active if is_template else text_inactive
+s3_class = "step-circle" if is_template else "step-circle inactive"
+
+# Dynamic UI Step Indicator
+st.markdown(f"""
 <div class="step-indicator">
     <div style="text-align:center;">
-        <div class="step-circle" style="margin:0 auto; width:12px; height:12px;"></div>
-        <span style="font-size:0.8rem; color:#ff7b54; margin-top:5px; display:block;">Mapping</span>
+        <div class="{s1_class}" style="margin:0 auto; width:12px; height:12px;"></div>
+        <span style="font-size:0.8rem; color:{s1_txt}; margin-top:5px; display:block;">Mapping</span>
     </div>
-    <div class="step-line"></div>
+    <div class="{l1_class}"></div>
     <div style="text-align:center;">
-        <div class="step-circle" style="margin:0 auto; width:12px; height:12px;"></div>
-        <span style="font-size:0.8rem; color:#ff7b54; margin-top:5px; display:block;">Complete</span>
+        <div class="{s2_class}" style="margin:0 auto; width:12px; height:12px;"></div>
+        <span style="font-size:0.8rem; color:{s2_txt}; margin-top:5px; display:block;">Source</span>
     </div>
-    <div class="step-line inactive"></div>
+    <div class="{l2_class}"></div>
     <div style="text-align:center;">
-        <div class="step-circle inactive" style="margin:0 auto; width:12px; height:12px;"></div>
-        <span style="font-size:0.8rem; color:#8c92ac; margin-top:5px; display:block;">Template</span>
+        <div class="{s3_class}" style="margin:0 auto; width:12px; height:12px;"></div>
+        <span style="font-size:0.8rem; color:{s3_txt}; margin-top:5px; display:block;">Template</span>
     </div>
 </div>
 """, unsafe_allow_html=True)
